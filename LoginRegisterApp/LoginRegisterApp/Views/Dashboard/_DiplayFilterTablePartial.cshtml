@@ -1,0 +1,55 @@
+﻿@model ViewModel
+
+@{
+    string sectionName = ViewData["SectionName"].ToString();
+    string gradeLevel = ViewData["GradeLevel"].ToString();
+
+    var Students = Model.Students.Where(s => s.Section.Name.Contains(sectionName));
+}
+
+
+
+
+@{ if (sectionName == "Select" && gradeLevel == "Select")
+    {
+        <tr>
+            <td width="20%">-</td>
+            <td width="30%">-</td>
+            <td width="20%">-</td>
+            <td width="30%">-</td>
+        </tr>
+
+
+    }
+    else if (sectionName == "Select")
+    {
+        int intGradeLevel = Int32.Parse(gradeLevel);
+        Students = Model.Students.Where(s => s.Section.GradeLevel.Equals(intGradeLevel));
+    }
+    else if (gradeLevel == "Select")
+    {
+        Students = Model.Students.Where(s => s.Section.Name.Contains(sectionName));
+    }
+    else
+    {
+        int intGradeLevel = Int32.Parse(gradeLevel);
+        Students = Model.Students.Where(s => s.Section.Name.Contains(sectionName)).Where(s => s.Section.GradeLevel.Equals(intGradeLevel));
+    }
+}
+
+@foreach (var sec in Model.Sections)
+{
+
+}
+
+@foreach (var obj in Students)
+{
+    <tr>
+        <td width="20%">@obj.ID</td>
+        <td width="30%">@obj.Name</td>
+        <td width="20%">@obj.Section.GradeLevel</td>
+        <td width="30%">@obj.Section.Name</td>
+    </tr>
+}
+
+

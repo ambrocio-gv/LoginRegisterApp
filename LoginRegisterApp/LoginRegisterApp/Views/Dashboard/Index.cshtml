@@ -1,0 +1,68 @@
+﻿@*@model ViewModel
+
+@{
+    var sectionList = Model.Sections.ToList(); 
+ }*@
+
+<div class="container">
+
+
+    <div id="mySidebar" class="sidebar mt-5">
+        <div class="mt-5"></div>
+
+
+        <a href="javascript:void(0)" id="closer" class="closebtn" onclick="closeNav()"><i class="fas fa-times"></i></a>
+        <a href="#" id="loadViewButton">School</a>
+        <a href="#" id="loadViewButton2">Contact Us</a>
+    </div>
+
+    <div id="main">
+
+        <button id="hamburger" class="openbtn" onclick="openNav()"><i class="fas fa-bars"></i></button>
+        <h2>Collapsed Sidebar</h2>
+        <p>Click on the hamburger menu/bar icon to open the sidebar, and push this content to the right.</p>
+    </div>
+  
+    <div id="partialViewContainer">
+
+    </div>
+</div>
+
+<script>    
+    function openNav() {
+    document.getElementById("main").style.display = "none";
+    document.getElementById("partialViewContainer").style.display = "block";
+    document.getElementById("mySidebar").style.width = "250px";
+        document.getElementById("partialViewContainer").style.marginLeft = "250px";
+       
+    }
+
+    function closeNav() {
+        document.getElementById("main").style.display = "block";
+        document.getElementById("partialViewContainer").style.display = "none";
+        document.getElementById("mySidebar").style.width = "0";
+        document.getElementById("partialViewContainer").style.marginLeft = "0";
+    }
+</script>
+
+<script>
+    $(document).on('click', '#loadViewButton', function () {
+        $.ajax({
+            type: "GET",
+        url: '/Dashboard/DisplayStudentTable',
+            success: function (data, textStatus, jqXHR) {
+                $('#partialViewContainer').html(data);
+            }
+        });
+    });
+
+    $(document).on('click', '#loadViewButton2', function () {
+        $.ajax({
+            type: "GET",
+            url: '/Dashboard/DisplayStudentTable2',
+            success: function (data, textStatus, jqXHR) {
+                $('#partialViewContainer').html(data);
+            }
+        });
+    });
+</script>

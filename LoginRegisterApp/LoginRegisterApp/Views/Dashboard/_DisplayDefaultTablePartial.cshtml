@@ -1,0 +1,20 @@
+﻿@model ViewModel
+
+
+
+@foreach (var sec in Model.Sections)
+{
+
+}
+
+
+@foreach (var obj in Model.Students)
+{
+    <tr>
+        <td width="20%">@obj.ID</td>
+        <td width="30%">@obj.Name</td>
+        <td width="20%">@obj.Section.GradeLevel</td>
+        <td width="30%">@obj.Section.Name</td>
+    </tr>
+}
+

@@ -1,0 +1,110 @@
+﻿@model ViewModel 
+
+<div id="table-div" class="row pt-4">
+    <div class="col-6">
+        <h2 class="text-primary">Student List</h2>
+    </div>
+    <div class="col-3">
+        <button type="button" class="btn btn-outline-success" id="filterTableButton">Filter Table</button>
+        
+    </div>
+    <div class="col-3">
+        <button type="button" class="btn btn-outline-warning" id="resetTableButton">Reset Table</button>
+    </div>
+</div>
+
+    <br /><br />
+     
+   
+<table class="table table-borded table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+            </th>
+
+            <th>
+            </th>
+
+            <th>
+                <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="gradeLevelSelect">
+                    <option selected>Select</option>
+
+                    @foreach (var obj in Model.Sections.GroupBy(s => s.GradeLevel).Select(s => s.FirstOrDefault()))
+                    {
+
+                        <option>@obj.GradeLevel</option>
+                    }
+                </select>
+            </th>
+            <th>
+                <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" id="sectionNameSelect">
+                    <option selected>Select</option>
+
+                    @foreach (var obj in Model.Sections.GroupBy(s => s.Name).Select(s => s.FirstOrDefault()))
+                    {
+
+                        <option>@obj.Name</option>
+                    }
+                </select>
+
+            </th>
+        </tr>
+    </thead>
+    <thead>
+        <tr>
+            <th>
+                Student ID
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Grade Level
+            </th>
+            <th>
+                Section Name
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="tablePartialViewContainer">
+        @foreach (var obj in Model.Students)
+        {
+            <tr>
+                <td width="20%">@obj.ID</td>
+                <td width="30%">@obj.Name</td>
+                <td width="20%">@obj.Section.GradeLevel</td>
+                <td width="30%">@obj.Section.Name</td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+
+<script>
+    $(document).on('click', '#resetTableButton', function () {      
+        $.ajax({
+            type: "GET",
+            url: '/Dashboard/DisplayDefaultTable',
+            success: function (data, textStatus, jqXHR) {
+                $('#tablePartialViewContainer').html(data);
+            }
+        });
+    });
+
+    $(document).on('click', '#filterTableButton', function () {       
+        $.ajax({
+            type: "GET",
+            url: '/Dashboard/DisplayFilterTable',
+            data: { sectionName: $('#sectionNameSelect option:selected').text(), gradeLevel: $('#gradeLevelSelect option:selected').text()},
+            success: function (res, textStatus, jqXHR) {
+                $('#tablePartialViewContainer').html('').html(res)
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    });
+</script>
